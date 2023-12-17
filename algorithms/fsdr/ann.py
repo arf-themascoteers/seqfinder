@@ -1,47 +1,35 @@
 import torch.nn as nn
 import torch
+from algorithms.fsdr.band_index import BandIndex
+import my_utils
 
 
 class ANN(nn.Module):
-    def __init__(self, original_feature_size, target_feature_size):
+    def __init__(self, rows, target_feature_size):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.original_feature_size = original_feature_size
         self.target_feature_size = target_feature_size
-        self.indexer = nn.Sequential(
-            nn.Linear(self.original_feature_size,10),
-            nn.LeakyReLU(),
-            nn.Linear(10,target_feature_size),
-            nn.Sigmoid()
-        )
+        self.linear = my_utils.get_linear(rows, target_feature_size)
+        init_vals = torch.linspace(0.001,0.99, target_feature_size+2)
+        modules = []
+        for i in range(self.target_feature_size):
+            modules.append(BandIndex( ANN.inverse_sigmoid_torch(init_vals[i+1])))
+        self.machines = nn.ModuleList(modules)
 
-        self.linear = nn.Sequential(
-            nn.Linear(target_feature_size,10),
-            nn.LeakyReLU(),
-            nn.Linear(10,1)
-        )
+    @staticmethod
+    def inverse_sigmoid_torch(x):
+        return -torch.log(1.0 / x - 1.0)
 
-        self.indices = None
-
-        self.num_trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        print(f"Number of trainable parameters in the model: {self.num_trainable_params}")
-
-
-    def forward(self, x, spline):
-        x = self.indexer(x)
-        self.indices = torch.mean(x, dim=0)
-        outputs = torch.cat([spline.evaluate(i).reshape(-1,1) for i in self.indices], dim=1)
+    def forward(self, spline, size):
+        outputs = torch.zeros(size, self.target_feature_size, dtype=torch.float32).to(self.device)
+        for i,machine in enumerate(self.machines):
+            outputs[:,i] = machine(spline)
         soc_hat = self.linear(outputs)
         soc_hat = soc_hat.reshape(-1)
         return soc_hat
 
     def get_indices(self):
-        if self.indices is None:
-            return [-1 for i in range(self.target_feature_size)]
-        return self.indices
+        return [machine.index_value() for machine in self.machines]
 
-
-    def get_indices_batch(self):
-        return self.indexer(self.indices)
 
 
