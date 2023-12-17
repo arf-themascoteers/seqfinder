@@ -54,13 +54,13 @@ def get_metric_evaluator_for_traditional(X):
     return get_ann(X)
 
 
-def get_metric_evaluator_for_fscr(X):
+def get_metric_evaluator_for_fsdr(X):
     return get_ann(X)
 
 
 def get_metric_evaluator_for(algorithm_name,X):
     if algorithm_name == "fsdr":
-        return get_metric_evaluator_for_fscr(X)
+        return get_metric_evaluator_for_fsdr(X)
     return get_metric_evaluator_for_traditional(X)
 
 

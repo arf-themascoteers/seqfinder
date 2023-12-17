@@ -8,4 +8,3 @@ def get_splines(X, device):
     coeffs = natural_cubic_spline_coeffs(indices, X)
     spline = NaturalCubicSpline(coeffs)
     return spline
-
