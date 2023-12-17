@@ -1,0 +1,104 @@
+save models
+
+implement fscr
+
+ann.fit etc
+
+=======
+shyh wei - threshold
+
+train_x
+train_y
+
+test_x
+test_y
+
+1. Original: Train(train_x,train_y) - Score(test_x,test_y) ------
+2. FE: Z = features(train_x,train_y) -----
+3. Train(Z(train_x),train_y) - Score(Z(train_x),train_y)
+4. Train(Z(train_x),train_y) - Score(Z(test_x),test_y)
+
+======
+Added limitation - FSA for ANN only
+==
+
+do these tests, dump these cols
+====
+Ideas
+1: Feature selection model DL?
+
+validate against other datasets?
+==========
+
+justific - 1dcnn - requires downsize
+--hsi downsize could lose valuable info
+---lot of params needed for multiple cnn layers
+
+====
+
+improve perform with MLP
+
+
+Best shot till now: linear of internal, mlp for metric ev for trads, mlp for metric ev for fscr.
+Addition: If required - "FS for ANN" [or favoured for ANN - and concise list]
+
+===
+show resulting indices
+check if consistent with model
+
+list limitation which can be addresses
+
+==========
+
+1. stop overlapping
+2. exploitation vs exploration
+3. better than cubic spline
+4. select band sequence
+5. mutation
+6. skip
+
+=========
+
+Angles:
+
+1. supervised learning with maximum number of predictors
+2. supervised learning with limited predictors through (predictor index update with) continuous relaxation
+3. Learning Optimal Predictor Indices through Continuous Relaxation
+Optimizing Predictor Sets in Pseudo Time-Series: A Continuous Relaxation Approach
+
+Future:
+1. Instance-wise
+pip instam
+====
+Questions
+
+1: why not FI (dependent on model) - fi dependant on algo.
+2. why not LDA, vif
+
+Contribution
+
+1. Complexity not dependent on original size. not considering as discrete combination, rather continuous feature.
+2. if you have a set of features (mostly for NN - any FS based on underlying algo), you can refine with it.
+
+Good things
+1. feature convergence
+
+Limitation
+1. sensitive to initialization
+
+Note
+for exploration - traditional local minima escape algorithm
+
+Task
+1. cache
+2. produce for 66
+3. later - try for other datasets?
+
+Justific though Limitation
+
+1. A novel promising approach. Can be bettered by modifying different modules.
+
+
+1500 epochs - 0.001 best
+
+=====try 2500 epochs

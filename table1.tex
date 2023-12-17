@@ -1,0 +1,38 @@
+\begin{table}[h]
+\centering
+\mycustomsize
+\caption{ Execution time (in seconds) and $R^2$ of the algorithms for different target sizes ($t$) and datasets (original, downsampled, and truncated). The best and the second best $R^2$ for each combination of the dataset and target size are shown in bold fonts and italic fonts, respectively. While $R^2$ for FSDR is comparable to that of SFS, with an increase in target size and original feature size, the execution time for FSDR does not increase as sharply as for SFS.}
+\label{result-all}
+\begin{tabular}{|p{1cm}|r|rr|rr|rr|}
+    \hline
+     &  & \multicolumn{2}{c|}{\textbf{original}} & \multicolumn{2}{c|}{\textbf{downsampled}} & \multicolumn{2}{c|}{\textbf{truncated}} \\
+  \hline
+  \textbf{Algorithm} & \bm{$t$} & \textbf{time} & \bm{$R^2$} & \textbf{time} & \bm{$R^2$}& \textbf{time} & \bm{$R^2$}  \\
+  \hline
+\multirow{4}{*}{MI} & 2 & 433.39 & 0.51 & 8.00 & 0.53 & 12.21 & 0.65   \\
+                   & 5 & 430.03 & 0.51 & 7.78 & 0.69& 12.68 & 0.65 \\
+                   & 10 & 428.73 & 0.51 & 7.96 & 0.69& 12.71 & 0.65  \\
+                   & 15 & 428.98 & 0.64 & 7.93 & 0.72& 12.75 & 0.64  \\
+                   & 20 & 431.29 & 0.65 & 8.02 & 0.80& 12.75 & 0.65  \\
+\hline                                
+\multirow{4}{*}{SFS} & 2 & 60.95 & \textbf{0.69} & 0.90 & \textbf{0.69} & 33.79 & \textbf{0.79}  \\
+                   & 5 & 215.69 & \textbf{0.83} & 3.02 & \textbf{0.82}& 87.29 & \textit{0.83}  \\
+                   & 10 & 625.32 & \textbf{0.85} & 7.69 & \textbf{0.83} & 192.82 & \textbf{0.87}  \\
+                   & 15 & 1209.21 & \textbf{0.87} & 14.33 & \textbf{0.87} & 290.87 & \textbf{0.90}  \\
+                   & 20 & 2126.09 & \textbf{0.86} & 23.30 & \textbf{0.87} & 433.52 & \textbf{0.91}  \\                                   
+\hline                                
+\multirow{4}{*}{LASSO} & 2 & 1.38 & 0.21 & 0.02 & 0.22& 0.17 & 0.14  \\
+                       & 5 & 1.39 & 0.23 & 0.02 & 0.35& 0.05 & 0.14  \\
+                       & 10 & 1.42 & 0.21 & 0.02 & 0.26& 0.05 & 0.15  \\
+                       & 15 & 1.50 & 0.22 & 0.03 & 0.50& 0.04 & 0.16  \\
+                       & 20 & 1.40 & 0.21 & 0.02 & 0.67& 0.04 & 0.15  \\   
+\hline                                
+\multirow{4}{*}{\shortstack[l]{Proposed\\ FSDR}} & 2 & 41.61 & \textit{0.57} & 30.92 & \textit{0.60} & 7.97 & \textit{0.76}  \\
+                       & 5 & 54.64 & \textit{0.82} & 40.86 & \textit{0.80} & 12.25 & \textbf{0.85}  \\
+                       & 10 & 76.82 & \textit{0.83} & 55.31 & \textbf{0.83} & 20.61 & \textit{0.85}  \\
+                       & 15 & 99.03 & \textit{0.86} & 73.71 & \textit{0.82} & 22.22 & \textbf{0.90}  \\
+                       & 20 & 132.08 & \textit{0.85} & 92.75 & \textit{0.83} & 27.57 & \textit{0.87}  \\ 
+
+\hline                                
+\end{tabular}
+\end{table}
