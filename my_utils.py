@@ -47,7 +47,8 @@ def get_hidden(rows, feature_size):
 
 
 def get_ann(X):
-    return ModelANN(X)
+    return LinearRegression()
+    #return ModelANN(X)
 
 
 def get_metric_evaluator_for_traditional(X):
