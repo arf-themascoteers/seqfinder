@@ -13,7 +13,8 @@ if __name__ == '__main__':
                 for size in sizes:
                     tasks.append(
                         {
-                            "dataset": DSManager(features, samples),
+                            "feature": feature,
+                            "sample": sample,
                             "target_feature_size": size,
                             "algorithm": algorithm
                         }

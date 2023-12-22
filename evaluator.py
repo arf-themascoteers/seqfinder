@@ -22,10 +22,11 @@ class Evaluator:
     def evaluate(self):
         for task in self.tasks:
             print(task)
-            dataset_name = task["dataset"]
+            feature = task["feature"]
+            sample = task["sample"]
             target_feature_size = task["target_feature_size"]
             algorithm_name = task["algorithm"]
-            dataset = DSManager(ds_name=dataset_name)
+            dataset = DSManager(feature, sample)
 
             elapsed_time, r2_original, rmse_original, \
                 r2_reduced_train, rmse_reduced_train, \
