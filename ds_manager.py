@@ -7,20 +7,10 @@ import numpy as np
 
 
 class DSManager:
-    def __init__(self,ds_name="original"):
+    def __init__(self,features=4200,samples=21782):
         np.random.seed(0)
-        self.ds_name = ds_name
-        dataset_file_name = "dataset_4200_21782.csv"
-        if ds_name == "downscaled_525":
-            dataset_file_name = "dataset_525_21782.csv"
-        elif ds_name == "downscaled_66":
-            dataset_file_name = "dataset_66_21782.csv"
-        elif ds_name == "truncated_4200":
-            dataset_file_name = "dataset_4200_871.csv"
-        elif ds_name == "truncated_525":
-            dataset_file_name = "dataset_525_871.csv"
-
-        dataset = os.path.join("data", dataset_file_name)
+        self.dataset_file_name = f"dataset_{features}_{samples}.csv"
+        dataset = os.path.join("data", self.dataset_file_name)
         df = pd.read_csv(dataset)
         bands = len(df.columns) - 1
         self.X_columns = [str(i) for i in range(bands)]
@@ -31,7 +21,7 @@ class DSManager:
         self.full_data = DSManager._normalize(self.full_data)
 
     def __repr__(self):
-        return self.ds_name
+        return self.dataset_file_name
 
     def count_rows(self):
         return self.full_data.shape[0]
