@@ -1,7 +1,7 @@
 from evaluator import Evaluator
 
 if __name__ == '__main__':
-    algorithms = ["fsdr"]
+    algorithms = ["fsdr_seq_linear_multi"]
     features = [66]
     samples = [871]
     sizes = [5]
