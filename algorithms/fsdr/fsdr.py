@@ -18,7 +18,7 @@ class FSDR:
         self.lr = 0.001
         self.weight_decay = self.lr/10
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = my_utils.get_device()
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.epochs = my_utils.get_epoch(rows, self.target_feature_size)

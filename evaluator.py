@@ -1,3 +1,5 @@
+from sklearn.linear_model import LinearRegression
+from model_ann import ModelANN
 from ds_manager import DSManager
 from datetime import datetime
 import os
@@ -57,35 +59,29 @@ class Evaluator:
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
-        print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
-        _, _, r2_original, rmse_original = Evaluator.get_metrics(algorithm_name, X_train, y_train, X_test, y_test)
+        print(f"{algorithm_name}:X_train,X_test: {X_train.shape} {X_test.shape}")
+        r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
         selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
         X_train_reduced = algorithm.transform(X_train)
         X_test_reduced = algorithm.transform(X_test)
-        r2, rmse = algorithm.predict_it(X_test, y_test)
-        r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
-            Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
-        return elapsed_time, r2_original, rmse_original, \
-            r2_reduced_train, rmse_reduced_train, \
-            r2_reduced_test, rmse_reduced_test, X_test_reduced.shape[1], selected_features
+        r2_reduced, rmse_reduced = Evaluator.get_metrics(X_train_reduced, y_train, X_test_reduced, y_test)
+        r2_embedded, rmse_embedded = algorithm.predict_it(X_test, y_test)
+        results = {"r2_original": r2_original, "rmse_original": rmse_original,
+                   "r2_reduced": r2_reduced, "rmse_reduced": rmse_reduced,
+                   "r2_embedded": r2_embedded, "rmse_embedded": rmse_embedded,
+                   "elapsed_time": elapsed_time,
+                   "final_size": X_test_reduced.shape[1],
+                   "selected_features": selected_features}
+        return results
 
     @staticmethod
-    def get_metrics(algorithm_name, X_train, y_train, X_test, y_test):
-        metric_evaluator = my_utils.get_metric_evaluator_for(algorithm_name, X_train)
+    def get_metrics(X_train, y_train, X_test, y_test):
+        metric_evaluator = LinearRegression()
         metric_evaluator.fit(X_train, y_train)
-
-        y_pred = metric_evaluator.predict(X_train)
-        r2_train = round(r2_score(y_train, y_pred), 2)
-        rmse_train = round(math.sqrt(mean_squared_error(y_train, y_pred)), 2)
-
         y_pred = metric_evaluator.predict(X_test)
         r2_test = round(r2_score(y_test, y_pred), 2)
         rmse_test = round(math.sqrt(mean_squared_error(y_test, y_pred)), 2)
-
-        print(f"r2 train {r2_train}")
-        print(f"r2 test {r2_test}")
-
-        return r2_train, rmse_train, r2_test, rmse_test
+        return r2_test, rmse_test

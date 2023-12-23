@@ -5,10 +5,10 @@ from sklearn.metrics import r2_score
 
 
 class ModelANN(nn.Module):
-    def __init__(self, X):
+    def __init__(self):
         super().__init__()
         torch.manual_seed(3)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = my_utils.get_device()
         rows = X.shape[0]
         features = X.shape[1]
         self.linear = my_utils.get_linear(rows, features)
