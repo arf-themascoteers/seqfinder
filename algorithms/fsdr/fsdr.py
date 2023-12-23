@@ -10,7 +10,7 @@ import my_utils
 
 class FSDR:
     def __init__(self, rows, original_feature_size, target_feature_size, seq=False, mode="linear_multi"):
-        #mode = linear, fc, skip
+        #mode = linear_multi, fc, skip
         self.seq = seq
         self.original_feature_size = original_feature_size
         self.target_feature_size = target_feature_size
@@ -65,7 +65,7 @@ class FSDR:
         return max(r2,0), rmse
 
     def write_columns(self):
-        columns = ["epoch","train_r2","validation_r2","train_rmse","validation_rmse","time"]
+        columns = ["epoch","train_r2","validation_r2","train_rmse","validation_rmse","time","original_size"]
         for index,p in enumerate(self.model.get_indices()):
             columns.append(f"band_{index+1}")
         print("".join([c.ljust(20) for c in columns]))
@@ -76,7 +76,7 @@ class FSDR:
     def dump_row(self, epoch, X, spline, y, X_validation, spline_validation, y_validation):
         train_r2, train_rmse = self.evaluate(X, spline, y)
         test_r2, test_rmse = self.evaluate(X_validation, spline_validation, y_validation)
-        row = [train_r2, test_r2, train_rmse, test_rmse]
+        row = [train_r2, test_r2, train_rmse, test_rmse, self.original_feature_size]
         row = [round(r,5) for r in row]
         row = [epoch] + row + [self.get_elapsed_time()]
         for p in self.model.get_indices():
