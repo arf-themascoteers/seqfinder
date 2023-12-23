@@ -18,8 +18,6 @@ class Evaluator:
                 file.write("algorithm,samples,original_size,target_size,final_size,time"
                            "r2_original,r2_reduced,r2_embedded,"
                            "rmse_original,rmse_reduced,rmse_embedded,"
-                           "elapsed_time,"
-                           "final_size,"
                            "selected_features\n")
 
     def evaluate(self):
@@ -37,10 +35,11 @@ class Evaluator:
                 file.write(
                     f"{algorithm_name},{dataset.count_rows()},"
                     f"{dataset.count_features()},{target_feature_size},"
-                    f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
-                    f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
-                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
-                    f"{';'.join(str(i) for i in selected_features)}\n")
+                    f"{results['final_size']},{round(results['time'],2)}"
+                    
+                    f"{results['r2_original']},{results['r2_reduced']},{results['r2_embedded']},"
+                    f"{results['rmse_original']},{results['rmse_reduced']},{results['rmse_embedded']},"
+                    f"{';'.join(str(i) for i in results['selected_features'])}\n")
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
         df = pd.read_csv(self.filename)
@@ -69,7 +68,7 @@ class Evaluator:
         results = {"r2_original": r2_original, "rmse_original": rmse_original,
                    "r2_reduced": r2_reduced, "rmse_reduced": rmse_reduced,
                    "r2_embedded": r2_embedded, "rmse_embedded": rmse_embedded,
-                   "elapsed_time": elapsed_time,
+                   "time": elapsed_time,
                    "final_size": X_test_reduced.shape[1],
                    "selected_features": selected_features}
         return results
