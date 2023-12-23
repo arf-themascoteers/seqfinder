@@ -9,34 +9,31 @@ import my_utils
 
 
 class FSDR:
-    def __init__(self, rows, original_feature_size, target_feature_size, sigmoid=True):
-        self.sigmoid = sigmoid
+    def __init__(self, rows, original_feature_size, target_feature_size, seq=False, mode="linear"):
+        #mode = linear, fc, skip
+        self.seq = seq
         self.original_feature_size = original_feature_size
         self.target_feature_size = target_feature_size
-        self.lr = my_utils.get_lr(rows, target_feature_size)
-        self.model = ANN(self.original_feature_size, self.target_feature_size)
+        self.model = ANN(self.target_feature_size, self.original_feature_size, seq, mode)
+        self.lr = 0.001
+        self.weight_decay = self.lr/10
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
-        self.csv_file = os.path.join("results", f"fsdr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
+        self.csv_file = os.path.join("results", f"fsdr-{seq}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.', '')}.csv")
         self.start_time = datetime.now()
-        print(sum(p.numel() for p in self.model.parameters() if p.requires_grad))
+        print("Learnable Params",sum(p.numel() for p in self.model.parameters() if p.requires_grad))
+
 
     def get_elapsed_time(self):
         return round((datetime.now() - self.start_time).total_seconds(),2)
 
-    def create_optimizer(self):
-        weight_decay = self.lr/10
-        return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
-
     def fit(self, X, y, X_validation, y_validation):
         print(f"X,X_validation: {X.shape} {X_validation.shape}")
-        row_size = X.shape[0]
-        row_test_size = X_validation.shape[0]
         self.write_columns()
         self.model.train()
-        optimizer = self.create_optimizer()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
         spline = get_splines(X, self.device)
         X_validation = torch.tensor(X_validation, dtype=torch.float32).to(self.device)
@@ -49,8 +46,8 @@ class FSDR:
             loss_2 = 0
             loss = loss_1 + loss_2
             loss.backward()
-            optimizer.step()
-            optimizer.zero_grad()
+            self.optimizer.step()
+            self.optimizer.zero_grad()
             row = self.dump_row(epoch, X, spline, y, X_validation, spline_validation, y_validation)
             if epoch%50 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
@@ -98,9 +95,5 @@ class FSDR:
         indices = sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
         return list(dict.fromkeys(indices))
 
-    def transform(self, X):
-        return X[:,self.get_indices()]
-
-
-    def stds(self):
-        return torch.sum(torch.cat([torch.std(p, dim=0).reshape(1) for p in self.model.get_indices_batch()], dim=0))
+    def transform(self, x):
+        return x[:,self.get_indices()]

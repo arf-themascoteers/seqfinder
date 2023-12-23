@@ -1,6 +1,7 @@
 from sklearn.linear_model import LinearRegression
 from model_ann import ModelANN
 import torch.nn as nn
+import torch
 
 
 def get_hidden_for_full(feature_size):
@@ -98,3 +99,11 @@ def get_lr(rows, features):
 
 def get_epoch(rows, features):
     return 1500
+
+
+def inverse_sigmoid_torch(x):
+    return -torch.log(1.0 / x - 1.0)
+
+
+def get_device():
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")

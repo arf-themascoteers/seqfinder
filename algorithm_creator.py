@@ -3,6 +3,7 @@ from algorithms.algorithm_lle import AlgorithmLLE
 from algorithms.algorithm_pcat95 import AlgorithmPCAT95
 from algorithms.algorithm_rfe import AlgorithmRFE
 from algorithms.algorithm_fsdr import AlgorithmFSDR
+from algorithms.algorithm_fsdr_seq_linear import AlgorithmFSDRSeqLinear
 from algorithms.algorithm_sfs import AlgorithmSFS
 from algorithms.algorithm_sbs import AlgorithmSBS
 from algorithms.algorithm_kbest import AlgorithmKBest
@@ -27,6 +28,8 @@ class AlgorithmCreator:
             return AlgorithmRFE(X_train, y_train, target_feature_size)
         elif name == "fsdr":
             return AlgorithmFSDR(X_train, y_train, target_feature_size)
+        elif name == "fsdr_seq":
+            return AlgorithmFSDRSeqLinear(X_train, y_train, target_feature_size)
         elif name == "sfs":
             return AlgorithmSFS(X_train, y_train, target_feature_size)
         elif name == "sbs":

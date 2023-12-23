@@ -5,10 +5,13 @@ import my_utils
 
 
 class ANN(nn.Module):
-    def __init__(self, rows, target_feature_size):
+    def __init__(self, target_feature_size, original_feature_size, seq, mode):
         super().__init__()
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = my_utils.get_device()
         self.target_feature_size = target_feature_size
+        self.original_feature_size = original_feature_size
+        self.seq = seq
+        self.mode = mode
         self.linear = nn.Sequential(
             nn.Linear(self.target_feature_size, 15),
             nn.LeakyReLU(),
@@ -19,12 +22,10 @@ class ANN(nn.Module):
         init_vals = torch.linspace(0.001,0.99, target_feature_size+2)
         modules = []
         for i in range(self.target_feature_size):
-            modules.append(BandIndex( ANN.inverse_sigmoid_torch(init_vals[i+1])))
+            val = my_utils.inverse_sigmoid_torch(init_vals[i + 1])
+            bi = BandIndex(val, self.original_feature_size, self.seq, self.mode)
+            modules.append(bi)
         self.machines = nn.ModuleList(modules)
-
-    @staticmethod
-    def inverse_sigmoid_torch(x):
-        return -torch.log(1.0 / x - 1.0)
 
     def forward(self, spline):
         size = spline._a.shape[1]
@@ -37,6 +38,3 @@ class ANN(nn.Module):
 
     def get_indices(self):
         return [machine.index_value() for machine in self.machines]
-
-
-
