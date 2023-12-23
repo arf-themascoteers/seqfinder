@@ -7,7 +7,6 @@ from algorithm_creator import AlgorithmCreator
 from sklearn.metrics import r2_score, mean_squared_error
 import math
 import pandas as pd
-import my_utils
 
 
 class Evaluator:
@@ -16,9 +15,11 @@ class Evaluator:
         self.filename = os.path.join("results","results.csv")
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
-                file.write("algorithm,dataset,rows,columns,time,target_size,final_size,"
-                           "r2_original,r2_train,r2_test,"
-                           "rmse_original,rmse_train,rmse_test,"
+                file.write("algorithm,samples,original_size,target_size,final_size,time"
+                           "r2_original,r2_reduced,r2_embedded,"
+                           "rmse_original,rmse_reduced,rmse_embedded,"
+                           "elapsed_time,"
+                           "final_size,"
                            "selected_features\n")
 
     def evaluate(self):
@@ -30,16 +31,12 @@ class Evaluator:
             algorithm_name = task["algorithm"]
             dataset = DSManager(feature, sample)
 
-            elapsed_time, r2_original, rmse_original, \
-                r2_reduced_train, rmse_reduced_train, \
-                r2_reduced_test, rmse_reduced_test, \
-                final_indices, selected_features = \
-                self.do_algorithm(algorithm_name, dataset, target_feature_size)
-
+            results = self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
             with open(self.filename, 'a') as file:
                 file.write(
-                    f"{algorithm_name},{dataset},{dataset.count_rows()},"
+                    f"{algorithm_name},{dataset.count_rows()},"
+                    f"{dataset.count_features()},{target_feature_size},"
                     f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
                     f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
