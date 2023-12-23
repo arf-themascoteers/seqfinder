@@ -1,6 +1,5 @@
 from algorithm import Algorithm
 from sklearn.linear_model import Lasso
-import my_utils
 import numpy as np
 
 
@@ -10,10 +9,13 @@ class AlgorithmLasso(Algorithm):
         self.indices = None
 
     def get_selected_indices(self):
-        lasso = Lasso(alpha=1.0)
-        lasso.fit(self.X_train, self.y_train)
-        self.indices = np.argsort(np.abs(lasso.coef_))[::-1][:self.target_feature_size]
+        self.lasso = Lasso(alpha=1.0)
+        self.lasso.fit(self.X_train, self.y_train)
+        self.indices = np.argsort(np.abs(self.lasso.coef_))[::-1][:self.target_feature_size]
         return self, self.indices
 
     def transform(self, X):
         return X[:,self.indices]
+
+    def predict_it(self, X):
+        return self.lasso.predict(X)

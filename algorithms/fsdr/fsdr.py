@@ -97,3 +97,9 @@ class FSDR:
 
     def transform(self, x):
         return x[:,self.get_indices()]
+
+    def predict_it(self, X):
+        X = torch.tensor(X, dtype=torch.float32).to(self.device)
+        spline = get_splines(X, self.device)
+        y_hat = self.model(spline)
+        return y_hat.detach().cpu().numpy()

@@ -65,6 +65,7 @@ class Evaluator:
         elapsed_time = (datetime.now() - start_time).total_seconds()
         X_train_reduced = algorithm.transform(X_train)
         X_test_reduced = algorithm.transform(X_test)
+        r2, rmse = algorithm.predict_it(X_test, y_test)
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
             Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
         return elapsed_time, r2_original, rmse_original, \
@@ -88,35 +89,3 @@ class Evaluator:
         print(f"r2 test {r2_test}")
 
         return r2_train, rmse_train, r2_test, rmse_test
-
-
-
-    # def do_pca(self,X_train, y_train, target_feature_size):
-    #     pca = PCA(n_components=target_feature_size)
-    #     pca.fit(X_train)
-    #     return pca,[]
-    #
-    # def do_pls(self,X_train, y_train, target_feature_size):
-    #     pls = PLSRegression(n_components=target_feature_size)
-    #     pls.fit(X_train, y_train)
-    #     return pls,[]
-    #
-    # def do_rfe(self,X_train, y_train, target_feature_size):
-    #     rfe = RFE(LinearRegression(), n_features_to_select=target_feature_size)
-    #     rfe.fit(X_train, y_train)
-    #     indices = np.where(rfe.get_support())[0]
-    #     return rfe, indices
-    #
-    # def do_kbest(self,X_train, y_train, target_feature_size):
-    #     kbest = SelectKBest(score_func=f_regression, k=target_feature_size)
-    #     kbest.fit(X_train, y_train)
-    #     indices = np.where(kbest.get_support())[0]
-    #     return kbest, indices
-    #
-    # def do_frommodel(self,X_train, y_train, target_feature_size):
-    #     selector = SelectFromModel(Evaluator.get_internal_model(), threshold='median', max_features=target_feature_size)
-    #     selector.fit(X_train, y_train)
-    #     indices = np.where(selector.get_support())[0]
-    #     return selector, indices
-
-
