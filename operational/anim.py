@@ -34,7 +34,7 @@ def get_bands(row):
     bands = []
     for i in range(1, num_bands+1):
         for j in range(1, num_seq+1):
-            bands.append(df.iloc[row][f"band_{i + 1}_{ j + 1}"])
+            bands.append(df.iloc[row][f"band_{i}_{j}"])
     return bands
 
 
@@ -42,10 +42,11 @@ def count_bands():
     band_no = []
     seq_no = []
     for item in df.columns:
-        parts = item.split("-")
-        band_no.append(parts[1])
-        seq_no.append(parts[1])
-    return list(set(band_no)), list(set(seq_no))
+        if item.startswith("band_"):
+            parts = item.split("_")
+            band_no.append(parts[1])
+            seq_no.append(parts[2])
+    return len(set(band_no)), len(set(seq_no))
 
 
 def draw_init():
