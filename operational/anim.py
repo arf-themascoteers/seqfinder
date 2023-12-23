@@ -24,7 +24,7 @@ def update(frame):
     bands = get_bands(frame + 1)
     for i in range(num_bands):
         for j in range(num_seq):
-            band_value = bands[num_seq*i + j]
+            band_value = int(bands[num_seq*i + j])
             signal_value = signal[band_value]
             points[num_seq*i + j].set_offsets([band_value, signal_value])
     return points,
@@ -56,7 +56,7 @@ def draw_init():
     bands = get_bands(0)
     for i in range(num_bands):
         for j in range(num_seq):
-            band_value = bands[num_seq*i + j]
+            band_value = int(bands[num_seq*i + j])
             signal_value = signal[band_value]
             point = plt.scatter(band_value,signal_value, color=colour[i],s=50)
             points.append(point)
@@ -88,9 +88,9 @@ def get_sample_signal():
         file = "dataset_66_21782.csv"
     file = f"../data/{file}"
     band_df = pd.read_csv("../data/dataset_4200_871.csv")
-    return band_df.iloc[99][0:-1]
+    return list(band_df.iloc[99][0:-1])
 
 
 if __name__ == "__main__":
-    animate("../results/fsdr-20-1702933718238.csv", False)
+    animate("../results/fsdr-20-1702933718239.csv", False)
 
