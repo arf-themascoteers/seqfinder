@@ -17,7 +17,7 @@ class BandIndex(nn.Module):
         self.distance = 5
         self.normalized_distance = self.distance/original_feature_size
         if seq:
-            if self.mode == "linear":
+            if self.mode == "linear_multi":
                 self.linear = nn.Sequential(
                     nn.Linear(self.sequence_length,5),
                     nn.LeakyReLU(),
@@ -27,7 +27,7 @@ class BandIndex(nn.Module):
     def forward(self, spline):
         idx = self.index_value()
         if self.seq:
-            if self.mode == "linear":
+            if self.mode == "linear_multi":
                 for i in range(self.sequence_length):
                     idxs = torch.cat([idx + (i*self.normalized_distance)], dim=0)
                     outs = spline.evaluate(idxs)

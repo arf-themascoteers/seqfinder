@@ -9,7 +9,7 @@ import my_utils
 
 
 class FSDR:
-    def __init__(self, rows, original_feature_size, target_feature_size, seq=False, mode="linear"):
+    def __init__(self, rows, original_feature_size, target_feature_size, seq=False, mode="linear_multi"):
         #mode = linear, fc, skip
         self.seq = seq
         self.original_feature_size = original_feature_size
@@ -21,7 +21,7 @@ class FSDR:
         self.device = my_utils.get_device()
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
+        self.epochs = 1500
         self.csv_file = os.path.join("results", f"fsdr-{seq}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.', '')}.csv")
         self.start_time = datetime.now()
         print("Learnable Params",sum(p.numel() for p in self.model.parameters() if p.requires_grad))
