@@ -1,5 +1,4 @@
 from evaluator import Evaluator
-from ds_manager import DSManager
 
 if __name__ == '__main__':
     algorithms = ["fsdr"]
