@@ -21,6 +21,7 @@ class FSDR:
         self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
         self.csv_file = os.path.join("results", f"fsdr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.start_time = datetime.now()
+        print(sum(p.numel() for p in self.model.parameters() if p.requires_grad))
 
     def get_elapsed_time(self):
         return round((datetime.now() - self.start_time).total_seconds(),2)
@@ -43,7 +44,7 @@ class FSDR:
         y = torch.tensor(y, dtype=torch.float32).to(self.device)
         y_validation = torch.tensor(y_validation, dtype=torch.float32).to(self.device)
         for epoch in range(self.epochs):
-            y_hat = self.model(X, spline)
+            y_hat = self.model(spline)
             loss_1 = self.criterion(y_hat, y)
             loss_2 = 0
             loss = loss_1 + loss_2
@@ -57,7 +58,7 @@ class FSDR:
 
     def evaluate(self,X, spline,y):
         self.model.eval()
-        y_hat = self.model(X, spline)
+        y_hat = self.model(spline)
         y_hat = y_hat.reshape(-1)
         y_hat = y_hat.detach().cpu().numpy()
         y = y.detach().cpu().numpy()

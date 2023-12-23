@@ -5,8 +5,8 @@ if __name__ == '__main__':
     algorithms = ["fsdr"]
     features = [525]
     samples = [21782]
-    samples = [871]
-    sizes = [5]
+    #samples = [871]
+    sizes = [20]
     tasks = []
     for feature in features:
         for sample in samples:

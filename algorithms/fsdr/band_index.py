@@ -17,14 +17,16 @@ class BandIndex(nn.Module):
         )
 
     def forward(self, spline):
+        scale = 0.005
         idx_0 = self.index_value()
-        idx_1 = idx_0+0.01
-        idx_2 = idx_0+0.02
-        idx_3 = idx_0+0.03
-        idx_4 = idx_0+0.04
-        idx_5 = idx_0+0.05
-        outs = spline.evaluate([idx_0, idx_1, idx_2, idx_3, idx_4, idx_5])
-        return self.linear(outs)
+        idx_1 = idx_0+ scale*1
+        idx_2 = idx_0+ scale*2
+        idx_3 = idx_0+ scale*3
+        idx_4 = idx_0+ scale*4
+        idx = torch.hstack((idx_0, idx_1, idx_2, idx_3, idx_4))
+        outs = spline.evaluate(idx)
+        outs = outs.permute(1, 0)
+        return self.linear(outs).reshape(-1)
 
     def index_value(self):
         return F.sigmoid(self.raw_index)
