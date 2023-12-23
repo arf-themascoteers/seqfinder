@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
+from algorithms.fsdr.pe import PositionalEncoding
 
 
 class BandIndex(nn.Module):
@@ -10,6 +11,7 @@ class BandIndex(nn.Module):
             val = torch.rand(1)
             val = (val*10)-5
         self.raw_index = nn.Parameter(val)
+        #self.pe = PositionalEncoding(5,0.1, 10)
         self.linear = nn.Sequential(
             nn.Linear(5,5),
             nn.LeakyReLU(),
@@ -26,6 +28,7 @@ class BandIndex(nn.Module):
         idx = torch.hstack((idx_0, idx_1, idx_2, idx_3, idx_4))
         outs = spline.evaluate(idx)
         outs = outs.permute(1, 0)
+        #outs = self.pe(outs)
         return self.linear(outs).reshape(-1)
 
     def index_value(self):

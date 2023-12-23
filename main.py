@@ -6,7 +6,7 @@ if __name__ == '__main__':
     features = [525]
     samples = [21782]
     #samples = [871]
-    sizes = [20]
+    sizes = [10]
     tasks = []
     for feature in features:
         for sample in samples:
