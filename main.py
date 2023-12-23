@@ -3,10 +3,9 @@ from ds_manager import DSManager
 
 if __name__ == '__main__':
     algorithms = ["fsdr"]
-    features = [4200]
-    samples = [21782]
-    #samples = [871]
-    sizes = [30]
+    features = [66]
+    samples = [871]
+    sizes = [5]
     tasks = []
     for feature in features:
         for sample in samples:
