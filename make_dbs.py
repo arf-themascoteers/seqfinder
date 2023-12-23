@@ -47,6 +47,9 @@ def make_66():
         short_signal,_,_,_,_,_,_ = pywt.wavedec(signal, 'db1', level=6)
         df2.loc[len(df2)] = list(short_signal) + [row.iloc[-1]]
     df2.to_csv(f"data/dataset_66_{len(df2)}.csv", index=False)
+    df2 = df2.sample(frac=0.04)
+    size = len(df2)
+    df2.to_csv(f"data/dataset_66_{size}.csv", index=False)
 
 def test():
     df = pd.read_csv("data/dataset.csv")
