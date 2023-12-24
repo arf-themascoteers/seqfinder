@@ -19,15 +19,20 @@ class BandIndex(nn.Module):
         if seq:
             if self.mode == "linear_multi":
                 self.linear = nn.Sequential(
-                    nn.Linear(self.seq_size,self.seq_size)
+                    nn.Linear(self.seq_size,self.get_embedding_size())
                 )
         else:
             self.seq_size = 1
         self.distance_vector = torch.full((seq_size,), self.normalized_distance) * torch.linspace(0,self.seq_size-1,self.seq_size)
 
+    def get_embedding_size(self):
+        if not self.seq:
+            return 1
+        if self.mode == "linear_multi":
+            return self.seq_size
+
     def forward(self, spline):
-        main_index = self.index_value()
-        indices = self.distance_vector + main_index
+        indices = self.get_normalized_indices()
         if self.seq:
             if self.mode == "linear_multi":
                 return self.forward_fsdr_seq_linear_multi(spline, indices)
@@ -45,3 +50,11 @@ class BandIndex(nn.Module):
     def index_value(self):
         return F.sigmoid(self.raw_index)
 
+    def get_normalized_indices(self):
+        main_index = self.index_value()
+        return self.distance_vector + main_index
+
+    def get_indices(self):
+        indices = self.get_normalized_indices()
+        indices = torch.round(indices*self.original_feature_size)
+        return indices
