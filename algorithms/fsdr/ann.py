@@ -37,4 +37,14 @@ class ANN(nn.Module):
         return soc_hat
 
     def get_indices(self):
-        return [machine.index_value() for machine in self.machines]
+        groups = []
+        for machine in self.machines:
+            indices = []
+            main_index = machine.index_value()
+            if not self.seq:
+                indices.append(main_index)
+            else:
+                if self.mode == "linear_multi":
+                    pass
+            groups.append(indices)
+        return groups

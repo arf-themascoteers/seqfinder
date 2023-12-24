@@ -9,7 +9,7 @@ import my_utils
 
 
 class FSDR:
-    def __init__(self, rows, original_feature_size, target_feature_size, seq=False, mode="linear_multi"):
+    def __init__(self, rows, original_feature_size, target_feature_size, seq, mode):
         #mode = linear_multi, fc, skip
         self.seq = seq
         self.original_feature_size = original_feature_size
@@ -92,6 +92,10 @@ class FSDR:
         return round(raw_index.item() * multiplier)
 
     def get_indices(self):
+        indices = sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
+        return list(dict.fromkeys(indices))
+
+    def get_flattened_indices(self):
         indices = sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
         return list(dict.fromkeys(indices))
 
