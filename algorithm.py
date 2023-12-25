@@ -33,3 +33,6 @@ class Algorithm(ABC):
             rmse = max(0.0,rmse)
             return r2, rmse
         return -1,-1
+
+    def get_details(self):
+        return self.__class__.__name__

@@ -13,16 +13,35 @@ class Evaluator:
     def __init__(self, tasks):
         self.tasks = tasks
         self.filename = os.path.join("results","results.csv")
+        self.columns = [
+            "algorithm",
+
+            "original_size",
+            "target_size",
+            "final_size",
+
+            "time",
+
+            "r2_original",
+            "r2_reduced",
+            "r2_embedded",
+
+            "rmse_original",
+            "rmse_reduced",
+            "rmse_embedded",
+
+            "selected_features"
+
+        ]
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
-                file.write("algorithm,samples,original_size,target_size,final_size,time"
-                           "r2_original,r2_reduced,r2_embedded,"
-                           "rmse_original,rmse_reduced,rmse_embedded,"
-                           "selected_features\n")
+                file.write(",".join(self.columns)+"\n")
 
     def evaluate(self):
         for task in self.tasks:
+            print("*****************************************")
             print(task)
+            print("*****************************************")
             feature = task["feature"]
             sample = task["sample"]
             target_feature_size = task["target_feature_size"]

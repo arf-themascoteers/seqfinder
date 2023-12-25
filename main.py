@@ -1,10 +1,18 @@
 from evaluator import Evaluator
 
 if __name__ == '__main__':
-    algorithms = ["fsdr_seq_linear_multi"]
+    #n filters
+    #size filter
+    #distance
+    #larnable?
+    #embedding_size
+    #embedding_method - asis, embedding (size),
+
+    algorithms = ["fsdr"]
     features = [66]
     samples = [871]
     sizes = [5]
+
     tasks = []
     for feature in features:
         for sample in samples:

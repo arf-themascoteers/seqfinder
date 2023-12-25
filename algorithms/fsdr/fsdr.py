@@ -9,12 +9,11 @@ import my_utils
 
 
 class FSDR:
-    def __init__(self, rows, original_feature_size, target_feature_size, seq, mode):
+    def __init__(self, rows, original_feature_size, target_feature_size, mode):
         #mode = linear_multi, fc, skip
-        self.seq = seq
         self.original_feature_size = original_feature_size
         self.target_feature_size = target_feature_size
-        self.model = ANN(self.target_feature_size, self.original_feature_size, seq, mode)
+        self.model = ANN(self.target_feature_size, self.original_feature_size, mode)
         self.lr = 0.001
         self.weight_decay = self.lr/10
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
@@ -22,7 +21,7 @@ class FSDR:
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.epochs = 1500
-        self.csv_file = os.path.join("results", f"fsdr-{seq}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.', '')}.csv")
+        self.csv_file = os.path.join("results", f"fsdr-{target_feature_size}-{str(datetime.now().timestamp()).replace('.', '')}.csv")
         self.start_time = datetime.now()
         print("Learnable Params",sum(p.numel() for p in self.model.parameters() if p.requires_grad))
 
@@ -63,6 +62,10 @@ class FSDR:
         rmse = math.sqrt(mean_squared_error(y, y_hat))
         self.model.train()
         return max(r2,0), rmse
+
+    def get_band_columns(self):
+        band_columns = []
+
 
     def write_columns(self):
         columns = ["epoch","train_r2","validation_r2","train_rmse","validation_rmse","time","original_size"]
