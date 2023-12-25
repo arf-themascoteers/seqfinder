@@ -7,7 +7,6 @@ def get_default_configuration():
         "distance_learnability": None,#"none"(None),"uniform","diverse"
         "embedding_method": "identity", # single_layer, two_layers,
         "embedding_size": 1,
-        "skip": None, #"none" (None), band_evaluations, mid_layer
-
+        "out": "output" #output, concat_input, concat_mid_layer
     }
 
