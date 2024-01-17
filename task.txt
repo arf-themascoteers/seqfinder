@@ -22,3 +22,16 @@ for each part, one set of weights vs multiple set of weights
 fixed length, variable length
 
 cut (borders) vs uncut
+
+===
+
+            algorithm = task["algorithm"]
+            feature = task["feature"]
+            sample = task["sample"]
+            filter = task["filter"]
+            seq_size = task["seq_size"]
+            distance = task["distance"]
+            distance_learnability = task["distance_learnability"]
+            embedding_method = task["embedding_method"]
+            embedding_size = task["embedding_size"]
+            out = task["out"]

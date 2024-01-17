@@ -16,9 +16,9 @@ class Evaluator:
         self.columns = [
             "algorithm",
 
-            "original_size",
-            "target_size",
-            "final_size",
+            "feature",
+            "target_feature",
+            "final_feature",
 
             "time",
 
@@ -42,18 +42,16 @@ class Evaluator:
             print("*****************************************")
             print(task)
             print("*****************************************")
+            algorithm = task["algorithm"]
             feature = task["feature"]
             sample = task["sample"]
-            target_feature_size = task["target_feature_size"]
-            algorithm_name = task["algorithm"]
             dataset = DSManager(feature, sample)
-
-            results = self.do_algorithm(algorithm_name, dataset, target_feature_size)
+            results = self.do_algorithm(algorithm, dataset, task)
 
             with open(self.filename, 'a') as file:
                 file.write(
-                    f"{algorithm_name},{dataset.count_rows()},"
-                    f"{dataset.count_features()},{target_feature_size},"
+                    f"{algorithm},{dataset.count_rows()},"
+                    f"{dataset.count_features()},"
                     f"{results['final_size']},{round(results['time'],2)}"
                     
                     f"{results['r2_original']},{results['r2_reduced']},{results['r2_embedded']},"

@@ -26,6 +26,7 @@ def confs(algorithms, features, samples,
                                                 embedding_size,\
                                                 out
 
+
 if __name__ == '__main__':
     algorithms = ["fsdr"]
     features = [66]
