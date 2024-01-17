@@ -1,3 +1,15 @@
+algorithm
+features
+samples
+seq_size
+distance
+distance_learnabilities = [None]  # "none"(None),"uniform","diverse"
+embedding_methods = ["identity"]  # single_layer, two_layers,
+embedding_sizes = [1]
+outs = ["output"]  # output, concat_input, concat_mid_layer
+
+========================
+
 continuous seq, random seq
 
 ordered seq, unordered seq
