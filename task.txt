@@ -1,6 +1,7 @@
 algorithm
 features
 samples
+counts
 seq_size
 distance
 distance_learnabilities = [None]  # "none"(None),"uniform","diverse"
